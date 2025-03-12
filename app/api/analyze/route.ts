@@ -31,9 +31,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Remove the data URL prefix if present and get base64 data
-    const base64Data = image.split(',')[1] || image;
-
     // Get Gemini model
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
@@ -44,10 +41,46 @@ export async function POST(req: Request) {
         history: [],
       });
 
-      const prompt = `Please analyze this price tag image and provide the following information:
+      // Determine if this is a manual entry or image analysis
+      const isManualEntry = image.startsWith('Price:');
+      
+      let prompt;
+      if (isManualEntry) {
+        // Extract the price from the manual entry
+        const priceValue = image.replace('Price:', '').trim();
+        
+        prompt = `Please analyze this manually entered price and provide the following information:
+
+Price entered: ${priceValue}
+Target region: ${region}
+Target currency: ${currency}
+
+Please provide:
+1. Determine the local currency used in ${region}
+2. Convert the price from the local currency to ${currency} using current exchange rates
+3. Calculate applicable sales tax for ${region}
+
+Tax calculation rules:
+- For regions like Australia where GST is included in displayed prices, report $0 additional tax
+- For other regions, apply the standard local sales tax rate
+- Default to 0% if tax rate cannot be determined
+
+Return only the data in this exact JSON format:
+{
+  "detected_price": "${priceValue}",
+  "original_currency": "local currency code",
+  "converted_price": "amount in ${currency}",
+  "applicable_tax_rate": "tax rate percentage",
+  "applicable_taxes": "tax amount in ${currency}",
+  "total_price_local": "original price plus tax in local currency",
+  "total_price": "converted price plus tax in ${currency}"
+}`;
+      } else {
+        // For image analysis
+        prompt = `Please analyze this price tag image and provide the following information:
 
 1. Extract the most prominent price shown in the image
-2. Determine the local currency used in ${region} and assume this is the correct currency for conversion. do not attempt to determine the location or currency based on the photo.
+2. Determine the local currency used in ${region} and assume this is the correct currency for conversion
 3. Convert the price to ${currency}
 4. Calculate applicable sales tax for ${region}
 
@@ -66,16 +99,20 @@ Return only the data in this exact JSON format:
   "total_price_local": "original price plus tax in local currency",
   "total_price": "converted price plus tax in ${currency}"
 }`;
+      }
 
-      // Send message to model
+      // Send message to model with appropriate content
       const result = await chatSession.sendMessage([
-        {
-          inlineData: {
-            mimeType: "image/jpeg",
-            data: base64Data
-          }
-        },
-        { text: prompt }
+        ...(isManualEntry 
+          ? [{ text: prompt }] 
+          : [{
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: image.split(',')[1] || image
+              }
+            },
+            { text: prompt }
+          ])
       ]);
 
       const response = result.response.text();
@@ -95,7 +132,8 @@ Return only the data in this exact JSON format:
             request: {
               currency,
               region,
-              prompt
+              prompt,
+              isManualEntry
             },
             response: response
           }

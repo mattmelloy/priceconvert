@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, MapPin, Navigation } from "lucide-react";
+import { Camera, MapPin, Navigation, PencilLine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -279,8 +279,8 @@ export default function Home() {
             </p>
           </div>
 
-          <Card className="glass-card p-8 rounded-2xl">
-            <div className="space-y-6">
+          <Card className="glass-card p-6 rounded-2xl">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="currency" className="text-lg">
                   My Home Currency
@@ -357,26 +357,36 @@ export default function Home() {
                 </Popover>
               </div>
 
-              <div className="space-y-6 pt-4">
-                <Link href="/scan" className="block">
+              <div className="flex gap-3 pt-2">
+                <Link href="/scan" className="flex-1">
                   <Button 
-                    className="w-full text-lg h-16 bg-gradient-to-r from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
-                    size="lg"
+                    className="w-full text-base h-12 bg-gradient-to-r from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
+                    size="default"
                   >
-                    <Camera className="mr-3 h-6 w-6" />
+                    <Camera className="mr-2 h-5 w-5" />
                     Scan Price Tag
                   </Button>
                 </Link>
 
-                <Link href="/list" className="block">
+                <Link href="/enter" className="flex-1">
                   <Button 
-                    variant="outline" 
-                    className="w-full h-12 glass-button rounded-xl"
+                    className="w-full text-base h-12 bg-gradient-to-r from-violet-500 to-pink-500 hover:from-violet-600 hover:to-pink-600 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02]"
+                    size="default"
                   >
-                    View List
+                    <PencilLine className="mr-2 h-5 w-5" />
+                    Enter Price Tag
                   </Button>
                 </Link>
               </div>
+
+              <Link href="/list" className="block">
+                <Button 
+                  variant="outline" 
+                  className="w-full h-10 glass-button rounded-xl"
+                >
+                  View List
+                </Button>
+              </Link>
             </div>
           </Card>
         </div>
