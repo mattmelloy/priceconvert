@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="45" fill="url(#gradient)"/>
+  <path d="M90 34C83.37 34 78 39.37 78 46V51H68C61.37 51 56 56.37 56 63V129C56 135.63 61.37 141 68 141H112C118.63 141 124 135.63 124 129V63C124 56.37 118.63 51 112 51H102V46C102 39.37 96.63 34 90 34ZM90 46C91.1 46 92 46.9 92 48V51H88V48C88 46.9 88.9 46 90 46ZM68 63H112V129H68V63ZM90 74C87.24 74 85 76.24 85 79C85 81.76 87.24 84 90 84C92.76 84 95 81.76 95 79C95 76.24 92.76 74 90 74ZM79 96V107H101V96H79Z" fill="white"/>
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="180" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" style="stop-color:#EC4899"/>
+      <stop offset="100%" style="stop-color:#8B5CF6"/>
+    </linearGradient>
+  </defs>
+</svg>
