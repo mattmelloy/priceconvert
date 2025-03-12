@@ -17,8 +17,10 @@ export default function Scan() {
   const { toast } = useToast();
 
   const capture = useCallback(() => {
-    const imageSrc = webcamRef.current?.getScreenshot();
-    setImgSrc(imageSrc);
+    const screenshot = webcamRef.current?.getScreenshot();
+    if (screenshot) {
+      setImgSrc(screenshot);
+    }
   }, [webcamRef]);
 
   const retake = () => {
